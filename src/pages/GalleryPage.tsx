@@ -8,7 +8,7 @@ export default function GalleryPage() {
   const navigate = useNavigate();
   const [all, setAll] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const [selectedType, setSelectedType] = useState<string | null>(null); // single type
 
   useEffect(() => {
     const load = async () => {
@@ -20,20 +20,15 @@ export default function GalleryPage() {
     load();
   }, []);
 
-  const toggleType = (type: string) => {
-    setSelectedTypes((prev) =>
-      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
-    );
+  const selectType = (type: string) => {
+    setSelectedType((prev) => (prev === type ? null : type)); // toggle single type
   };
 
   const allTypes = Array.from(new Set(all.flatMap((p) => p.types.map((t) => t.type.name))));
 
-  const filtered =
-    selectedTypes.length === 0
-      ? all
-      : all.filter((p) =>
-          selectedTypes.every((t) => p.types.some((pt) => pt.type.name === t))
-        );
+  const filtered = selectedType
+    ? all.filter((p) => p.types.some((pt) => pt.type.name === selectedType))
+    : all;
 
   const ids = filtered.map((p) => p.id);
 
@@ -46,7 +41,7 @@ export default function GalleryPage() {
       >
         ← Return to Home
       </button>
-      
+
       {/* Title */}
       <h1 className="text-4xl font-bold text-center text-pink-700 mb-8 drop-shadow-sm">
         Pokémon Gallery
@@ -57,14 +52,13 @@ export default function GalleryPage() {
         {allTypes.map((t) => (
           <button
             key={t}
-            onClick={() => toggleType(t)}
+            onClick={() => selectType(t)}
             className={`
               px-3 py-1 rounded-full border font-medium text-sm
               transition
-              ${
-                selectedTypes.includes(t)
-                  ? "bg-blue-400 text-white border-blue-400 shadow-md"
-                  : "bg-white text-gray-700 border-gray-300 hover:bg-blue-100"
+              ${selectedType === t
+                ? "bg-blue-400 text-white border-blue-400 shadow-md"
+                : "bg-white text-gray-700 border-gray-300 hover:bg-blue-100"
               }
             `}
           >
@@ -80,7 +74,7 @@ export default function GalleryPage() {
         </div>
       ) : filtered.length === 0 ? (
         <p className="text-center text-gray-500 text-lg mt-10">
-          No Pokémon found for selected type(s) 🫠
+          No Pokémon found for selected type 🫠
         </p>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
