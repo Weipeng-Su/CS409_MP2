@@ -29,6 +29,14 @@ export default function DetailPage() {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-yellow-50 to-yellow-100 p-6">
       <div className="bg-white shadow-lg rounded-3xl p-6 w-full max-w-md flex flex-col items-center">
+        {/* Return Button */}
+        <button
+          onClick={() => navigate(location.state?.from || "/", { state: { list } })}
+          className="self-start mb-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+        >
+          ← Return
+        </button>
+        
         {/* Pokémon Name */}
         <h1 className="text-4xl font-bold capitalize text-yellow-700 mb-4 drop-shadow-sm">
           {pokemon.name}
@@ -87,10 +95,10 @@ export default function DetailPage() {
         <div className="flex gap-4 mt-4">
           <button
             disabled={!prevId}
-            onClick={() => prevId && navigate(`/item/${prevId}`, { state: { list } })}
+            onClick={() => prevId && navigate(`/item/${prevId}`, { state: { list, from: location.state?.from } })}
             className={`
               px-4 py-2 rounded-lg font-medium shadow transition 
-              ${prevId ? "bg-blue-500 text-white hover:bg-blue-600" : "bg-gray-300 text-gray-600 cursor-not-allowed"}
+              ${prevId ? "bg-rose-400 text-white hover:opacity-90" : "bg-gray-300 text-gray-600 cursor-not-allowed"}
             `}
           >
             Prev
@@ -98,10 +106,10 @@ export default function DetailPage() {
 
           <button
             disabled={!nextId}
-            onClick={() => nextId && navigate(`/item/${nextId}`, { state: { list } })}
+            onClick={() => nextId && navigate(`/item/${nextId}`, { state: { list, from: location.state?.from } })}
             className={`
               px-4 py-2 rounded-lg font-medium shadow transition
-              ${nextId ? "bg-blue-500 text-white hover:bg-blue-600" : "bg-gray-300 text-gray-600 cursor-not-allowed"}
+              ${nextId ? "bg-cyan-400 text-white hover:opacity-90" : "bg-gray-300 text-gray-600 cursor-not-allowed"}
             `}
           >
             Next

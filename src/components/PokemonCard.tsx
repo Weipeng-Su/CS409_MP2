@@ -5,9 +5,10 @@ import { Link } from "react-router-dom";
 interface Props {
   pokemon: Pokemon;
   listIds: number[];
+  from?: string;
 }
 
-export default function PokemonCard({ pokemon, listIds }: Props) {
+export default function PokemonCard({ pokemon, listIds, from }: Props) {
   const img =
     pokemon.sprites.other?.["official-artwork"]?.front_default ||
     pokemon.sprites.front_default ||
@@ -16,7 +17,7 @@ export default function PokemonCard({ pokemon, listIds }: Props) {
   return (
     <Link
       to={`/item/${pokemon.id}`}
-      state={{ list: listIds }}
+      state={{ list: listIds, from }}
       className="
         flex flex-col items-center 
         bg-white 

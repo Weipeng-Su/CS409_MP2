@@ -5,8 +5,10 @@ import SearchBar from "../components/SearchBar";
 import SortControls from "../components/SortControls";
 import PokemonCard from "../components/PokemonCard";
 import { useDebouncedValue } from "../hooks/useDebouncedValue";
+import { useNavigate } from "react-router-dom";
 
 export default function ListPage() {
+  const navigate = useNavigate();
   const [all, setAll] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
@@ -51,6 +53,14 @@ export default function ListPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-6">
+      {/* Return Button */}
+      <button
+        onClick={() => navigate("/")}
+        className="mb-4 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+      >
+        ← Return to Home
+      </button>
+      
       {/* Title */}
       <h1 className="text-4xl font-bold text-center text-blue-700 mb-8 drop-shadow-sm">
         Pokémon List
@@ -85,7 +95,7 @@ export default function ListPage() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
           {sorted.map((p) => (
-            <PokemonCard key={p.id} pokemon={p} listIds={ids} />
+            <PokemonCard key={p.id} pokemon={p} listIds={ids} from="/list" />
           ))}
         </div>
       )}
