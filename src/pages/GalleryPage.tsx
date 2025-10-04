@@ -11,7 +11,7 @@ export default function GalleryPage() {
   useEffect(() => {
     const load = async () => {
       const list = await fetchPokemonList(50);
-      const details = await Promise.all(list.results.map(r => fetchPokemon(r.name)));
+      const details = await Promise.all(list.results.map((r) => fetchPokemon(r.name)));
       setAll(details);
       setLoading(false);
     };
@@ -19,38 +19,66 @@ export default function GalleryPage() {
   }, []);
 
   const toggleType = (type: string) => {
-    setSelectedTypes(prev =>
-      prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]
+    setSelectedTypes((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
     );
   };
 
-  const allTypes = Array.from(new Set(all.flatMap(p => p.types.map(t => t.type.name))));
+  const allTypes = Array.from(new Set(all.flatMap((p) => p.types.map((t) => t.type.name))));
 
-  const filtered = selectedTypes.length === 0
-    ? all
-    : all.filter(p => selectedTypes.every(t => p.types.some(pt => pt.type.name === t)));
+  const filtered =
+    selectedTypes.length === 0
+      ? all
+      : all.filter((p) =>
+          selectedTypes.every((t) => p.types.some((pt) => pt.type.name === t))
+        );
 
-  const ids = filtered.map(p => p.id);
+  const ids = filtered.map((p) => p.id);
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl mb-4">Pokémon Gallery</h1>
-      <div className="flex flex-wrap gap-2 mb-4">
-        {allTypes.map(t => (
+    <div className="min-h-screen bg-gradient-to-b from-pink-50 to-pink-100 p-6">
+      {/* Title */}
+      <h1 className="text-4xl font-bold text-center text-pink-700 mb-8 drop-shadow-sm">
+        Pokémon Gallery
+      </h1>
+
+      {/* Type Filters */}
+      <div className="flex flex-wrap justify-center gap-3 mb-6">
+        {allTypes.map((t) => (
           <button
             key={t}
-            className={`px-2 py-1 rounded border ${selectedTypes.includes(t) ? "bg-blue-200" : ""}`}
             onClick={() => toggleType(t)}
+            className={`
+              px-3 py-1 rounded-full border font-medium text-sm
+              transition
+              ${
+                selectedTypes.includes(t)
+                  ? "bg-blue-400 text-white border-blue-400 shadow-md"
+                  : "bg-white text-gray-700 border-gray-300 hover:bg-blue-100"
+              }
+            `}
           >
             {t}
           </button>
         ))}
       </div>
-      {loading ? <p>Loading…</p> :
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {filtered.map(p => <PokemonCard key={p.id} pokemon={p} listIds={ids} />)}
+
+      {/* Content */}
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <p className="text-lg text-gray-600 animate-pulse">Loading Pokémon…</p>
         </div>
-      }
+      ) : filtered.length === 0 ? (
+        <p className="text-center text-gray-500 text-lg mt-10">
+          No Pokémon found for selected type(s) 🫠
+        </p>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          {filtered.map((p) => (
+            <PokemonCard key={p.id} pokemon={p} listIds={ids} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
