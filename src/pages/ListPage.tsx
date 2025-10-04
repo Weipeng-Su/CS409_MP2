@@ -50,20 +50,45 @@ export default function ListPage() {
   const ids = sorted.map(p => p.id);
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl mb-4">Pokémon List</h1>
-      <SearchBar value={query} onChange={setQuery} />
-      <SortControls
-        sortKey={sortKey}
-        ascending={ascending}
-        onChangeKey={setSortKey}
-        onToggleOrder={() => setAscending(!ascending)}
-      />
-      {loading ? <p>Loading…</p> :
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {sorted.map(p => <PokemonCard key={p.id} pokemon={p} listIds={ids} />)}
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 p-6">
+      {/* Title */}
+      <h1 className="text-4xl font-bold text-center text-blue-700 mb-8 drop-shadow-sm">
+        Pokémon List
+      </h1>
+
+      {/* Controls */}
+      <div className="bg-white shadow-md rounded-xl p-4 mb-6 max-w-4xl mx-auto">
+        <div className="flex flex-col md:flex-row items-center gap-4">
+          <div className="flex-1 w-full">
+            <SearchBar value={query} onChange={setQuery} />
+          </div>
+          <SortControls
+            sortKey={sortKey}
+            ascending={ascending}
+            onChangeKey={setSortKey}
+            onToggleOrder={() => setAscending(!ascending)}
+          />
         </div>
-      }
+      </div>
+
+      {/* Content */}
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <p className="text-lg text-gray-600 animate-pulse">
+            Loading Pokémon…
+          </p>
+        </div>
+      ) : sorted.length === 0 ? (
+        <p className="text-center text-gray-500 text-lg mt-10">
+          No Pokémon found 🫠
+        </p>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          {sorted.map((p) => (
+            <PokemonCard key={p.id} pokemon={p} listIds={ids} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
