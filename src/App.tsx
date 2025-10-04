@@ -7,7 +7,7 @@ import DetailPage from "./pages/DetailPage";
 
 function App() {
   return (
-    <BrowserRouter basename="/mp2">
+    <BrowserRouter basename="/CS409_MP2">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/list" element={<ListPage />} />
